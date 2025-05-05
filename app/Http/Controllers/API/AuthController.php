@@ -8,7 +8,10 @@ use PhpParser\Node\Stmt\Return_;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -63,5 +66,25 @@ class AuthController extends Controller
             return $this->login($request);
         }
         return response()->json(['msg' => "error"]);
+    }
+
+    public function logout (Request $request)
+    {
+        try{
+            JWTAuth::invalidate($request->token);
+            return response()->json(['msg'=>'success']);
+
+        }catch(JWTException $E){
+            return \response()->json(['msg'=>$E->getMessage()]);
+        }
+    }
+    public function refresh (Request $request)
+    {
+        $new_token = JWTAuth::refresh($request->token);
+        if ($new_token){
+            return response()->json(['msg' => $new_token]);
+        }
+        return response()->json(['msg' => 'error']);
+
     }
 }
