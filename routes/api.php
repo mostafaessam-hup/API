@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Auth\Events\Login;
 use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,12 +20,12 @@ use App\Http\Controllers\API\AuthController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::group(['namespace' => 'API'], function () {
-    Route::post('login', [AuthController::class, 'login']);
-    Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
+Route::post('register', [AuthController::class, 'register']);
 
-    Route::group(["middleware" => "verify.token"], function () {
-        Route::post('logout', [AuthController::class, 'logout']);
-        Route::post('refresh',[AuthController::class, 'refresh']);
-    });
+Route::group(["middleware" => "verify.token"], function () {
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('refresh', [AuthController::class, 'refresh']);
+    Route::resource('categories', CategoryController::class)->except('create', 'edit');
 });
+
