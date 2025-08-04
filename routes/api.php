@@ -23,9 +23,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 
-Route::group(["middleware" => "verify.token"], function () {
+Route::group(["middleware" => ["verify.token","checkpass"]], function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
-    Route::resource('categories', CategoryController::class)->except('create', 'edit');
+    Route::resource('categories', CategoryController::class)->except('create', 'edit')->middleware("lang");
 });
 

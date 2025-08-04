@@ -11,7 +11,7 @@ class CategoryController extends Controller
 
     public function index(Request $request)
     {
-        $categories = Category::select('id', 'name_ar', 'name_en')->get();
+        $categories = Category::select('id', 'name_'.app()->getLocale())->get();
         if ($categories) {
             return response()->json(['status' => true, 'data' => $categories]);
         }
