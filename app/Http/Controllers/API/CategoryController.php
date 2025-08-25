@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\ApiHandler;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    use ApiHandler;
 
     public function index(Request $request)
     {
@@ -26,16 +28,20 @@ class CategoryController extends Controller
         ]);
 
         if (!$category) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Category not created',
-            ]);
+            return $this->errorMessage('Category not createdddd');
+            // return response()->json([
+            //     'status' => false,
+            //     'message' => 'Category not created',
+            // ]);
         }
-        return response()->json([
-            'status' => true,
-            'message' => 'Category created successfully',
-            'data' => $category,
-        ]);
+
+        return $this->successMessage('Category created successfully');
+
+        // return response()->json([
+        //     'status' => true,
+        //     'message' => 'Category created successfully',
+        //     'data' => $category,
+        // ]);
     }
 
     public function update(Request $request, $id)
